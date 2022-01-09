@@ -28,13 +28,15 @@ public class Vector2
         get
         {
             double len = this.magnitude;
-            if (len <= 0)
+            switch (len)
             {
-                return Vector2.zero;
+                case <= 0: return Vector2.zero;
+                case >= double.PositiveInfinity: return Vector2.one;
+                default:
+                    double x = this.x / len;
+                    double y = this.y / len;
+                    return new Vector2(x, y);
             }
-            double x = this.x / len;
-            double y = this.y / len;
-            return new Vector2(x, y);
         }
 
     }
@@ -99,6 +101,16 @@ public class Vector2
         get => new Vector2(0, -1);
     }
 
+    public static Vector2 positiveInfinity
+    {
+        get => new Vector2(double.PositiveInfinity, double.PositiveInfinity);
+    }
+
+    public static Vector2 negativeInfinity
+    {
+        get => new Vector2(double.NegativeInfinity, double.NegativeInfinity);
+    }
+
     // Constructors
     public Vector2(double x, double y)
     {
@@ -129,13 +141,21 @@ public class Vector2
     public bool Normalize()
     {
         double len = this.magnitude;
-        if (len <= 0)
+        switch (len)
         {
-            return false;
+            case <= 0: return false;
+            case >= double.PositiveInfinity: return false;
+            default:
+                this.x /= len;
+                this.y /= len;
+                return true;
         }
-        this.x /= len;
-        this.y /= len;
-        return true;
+    }
+
+    public void Set(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
     }
 
     // Static methods
@@ -203,7 +223,32 @@ public class Vector2
     {
         return $"[{this.x}, {this.y}]";
     }
+
+    public override bool Equals(object? other)
+    {
+        Vector2? otherVector2 = other as Vector2;
+
+        if (otherVector2 == null)
+            return false;
+
+        return this.x == otherVector2.x && this.y == otherVector2.y;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            // Suitable nullity checks etc, of course :)
+            hash = hash * 23 + this.x.GetHashCode();
+            hash = hash * 23 + this.y.GetHashCode();
+            return hash;
+        }
+
+    }
 }
+
+
 
 public class Vector3
 {
@@ -236,14 +281,18 @@ public class Vector3
         get
         {
             double len = this.magnitude;
-            if (len <= 0)
+            switch (len)
             {
-                return Vector3.zero;
+                case <= 0: return Vector3.zero;
+                case >= double.PositiveInfinity: return Vector3.one;
+                default:
+                    double x = this.x / len;
+                    double y = this.y / len;
+                    double z = this.z / len;
+                    return new Vector3(x, y, z);
             }
-            double x = this.x / len;
-            double y = this.y / len;
-            double z = this.z / len;
-            return new Vector3(x, y, z);
+
+
         }
 
     }
@@ -288,6 +337,17 @@ public class Vector3
     {
         get => new Vector3(0, 0, -1);
     }
+
+    public static Vector3 positiveInfinity
+    {
+        get => new Vector3(double.PositiveInfinity, double.PositiveInfinity, double.PositiveInfinity);
+    }
+
+    public static Vector3 negativeInfinity
+    {
+        get => new Vector3(double.NegativeInfinity, double.NegativeInfinity, double.NegativeInfinity);
+    }
+
 
     // Indexer
     public double this[int i]
@@ -356,15 +416,25 @@ public class Vector3
     public bool Normalize()
     {
         double len = this.magnitude;
-        if (len <= 0)
+        switch (len)
         {
-            return false;
+            case <= 0: return false;
+            case >= double.PositiveInfinity: return false;
+            default:
+                this.x /= len;
+                this.y /= len;
+                this.z /= len;
+                return true;
         }
-        this.x /= len;
-        this.y /= len;
-        this.z /= len;
-        return true;
     }
+
+    public void Set(double x, double y, double z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     // Static methods
 
     public static double Dot(Vector3 a, Vector3 b)
@@ -446,4 +516,28 @@ public class Vector3
     {
         return $"[{this.x}, {this.y}, {this.z}]";
     }
+
+    public override bool Equals(object? other)
+    {
+        Vector3? otherVector3 = other as Vector3;
+
+        if (otherVector3 == null)
+            return false;
+
+        return this.x == otherVector3.x && this.y == otherVector3.y && this.z == otherVector3.z;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked // Overflow is fine, just wrap
+        {
+            int hash = 17;
+            // Suitable nullity checks etc, of course :)
+            hash = hash * 23 + this.x.GetHashCode();
+            hash = hash * 23 + this.y.GetHashCode();
+            hash = hash * 23 + this.z.GetHashCode();
+            return hash;
+        }
+    }
 }
+
