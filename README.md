@@ -1,2 +1,2 @@
-# C#VectorClass
+# C# Vector Class
 Custom Vector Classes For C#
